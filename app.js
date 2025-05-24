@@ -34,7 +34,6 @@ async function handleSearch(event) {
 function renderWord(data) {
   const results = document.getElementById("results");
   const audioPhonetic = getAudioUrl(data);
-  // revisit
   results.innerHTML = `
     <h2>${capitalize(data.word)}</h2>
     <p><strong>Phonetic:</strong> ${data.phonetic || "N/A"}</p>
@@ -98,7 +97,7 @@ function clearError() {
 }
 
 // Save a favorite word to localStorage and update the favorite list.
-// Revisit
+// First time using localStorage hopefully set up properly
 function saveFavorite(word) {
   let favorites = JSON.parse(localStorage.getItem("favorites") || "[]");
   if (!favorites.includes(word)) {
@@ -123,7 +122,7 @@ function renderFavorites() {
 }
 
 // Export for testing
-export {
+module.exports = {
   fetchWordData,
   handleSearch,
   renderWord,
