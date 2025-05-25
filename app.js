@@ -123,9 +123,11 @@ function renderFavorites() {
   favoriteList.innerHTML = favorites
     .map(
       (word) =>
-        `<li>${capitalize(
+        `<li>
+      <button class="favorite-word" data-word="${word}">${capitalize(
           word
-        )}<button class="remove-favorite" data-word="${word}">Remove</button></li>`
+        )}</button>
+      <button class="remove-favorite" data-word="${word}">Remove</button></li>`
     )
     .join("");
 
@@ -135,6 +137,12 @@ function renderFavorites() {
       removeFavorite(e.target.getAttribute("data-word"));
     })
   );
+  document.querySelectorAll(".favorite-word").forEach((button) =>
+    button.addEventListener("click", (event) => {
+      const word = event.target.getAttribute("data-word");
+      loadFavoriteWord(word);
+    })
+  );
 }
 
 function removeFavorite(word) {
@@ -142,6 +150,28 @@ function removeFavorite(word) {
   favorites = favorites.filter((favorite) => favorite !== word);
   localStorage.setItem("favorites", JSON.stringify(favorites));
   renderFavorites();
+}
+
+function loadFavoriteWord(word) {
+  clearError();
+  fetchWordData(word)
+    .then((data) => {
+      renderWord(data);
+      highlightFavorite(word);
+    })
+    .catch(() => {
+      renderError("Sorry, that word was not found.");
+    });
+}
+
+function highlightFavorite(word) {
+  document.querySelectorAll(".favorite-word").forEach((button) => {
+    if (button.getAttribute("data-word") === word) {
+      button.classList.add("selected-favorite");
+    } else {
+      button.classList.remove("selected-favorite");
+    }
+  });
 }
 
 // Export for testing

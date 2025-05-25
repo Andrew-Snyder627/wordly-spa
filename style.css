@@ -147,6 +147,12 @@ blockquote {
   background: #e23b3b;
 }
 
+.selected-favorite {
+  background: #276ef1;
+  color: #fff;
+  font-weight: bold;
+}
+
 @media (max-width: 600px) {
   .container {
     padding: 1rem;
