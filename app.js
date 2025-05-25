@@ -3,6 +3,10 @@ document.addEventListener("DOMContentLoaded", () => {
   document
     .getElementById("search-form")
     .addEventListener("submit", handleSearch);
+  document.getElementById("clear-favorites").addEventListener("click", () => {
+    localStorage.removeItem("favorites");
+    renderFavorites();
+  });
 });
 
 // Fetch word data from API
@@ -117,8 +121,27 @@ function renderFavorites() {
     return;
   }
   favoriteList.innerHTML = favorites
-    .map((word) => `<li>${capitalize(word)}</li>`)
+    .map(
+      (word) =>
+        `<li>${capitalize(
+          word
+        )}<button class="remove-favorite" data-word="${word}">Remove</button></li>`
+    )
     .join("");
+
+  // Event listeners to remove buttons
+  document.querySelectorAll(".remove-favorite").forEach((button) =>
+    button.addEventListener("click", (e) => {
+      removeFavorite(e.target.getAttribute("data-word"));
+    })
+  );
+}
+
+function removeFavorite(word) {
+  let favorites = JSON.parse(localStorage.getItem("favorites") || "[]");
+  favorites = favorites.filter((favorite) => favorite !== word);
+  localStorage.setItem("favorites", JSON.stringify(favorites));
+  renderFavorites();
 }
 
 // Export for testing

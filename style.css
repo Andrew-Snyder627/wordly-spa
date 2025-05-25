@@ -131,6 +131,22 @@ blockquote {
   font-weight: bold;
 }
 
+.remove-favorite {
+  margin-left: 1em;
+  background: #ff5151;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  padding: 0.2em 0.6em;
+  font-size: 0.9em;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.remove-favorite:hover {
+  background: #e23b3b;
+}
+
 @media (max-width: 600px) {
   .container {
     padding: 1rem;
