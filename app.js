@@ -197,4 +197,10 @@ module.exports = {
   clearError,
   saveFavorite,
   renderFavorites,
+  removeFavorite,
+  // Using these to expose the selected favorite state for testing
+  getCurrentSelectedFavorite: () => currentSelectedFavorite,
+  setCurrentSelectedFavorite: (val) => {
+    currentSelectedFavorite = val;
+  },
 };

@@ -12,6 +12,9 @@ const {
   clearError,
   saveFavorite,
   renderFavorites,
+  removeFavorite,
+  getCurrentSelectedFavorite,
+  setCurrentSelectedFavorite,
 } = require("../app");
 
 // Function Testing
@@ -235,5 +238,45 @@ describe("handleSearch", () => {
     const fakeEvent = { preventDefault: jest.fn() };
     await handleSearch(fakeEvent);
     expect(document.getElementById("results").innerHTML).toContain("Cat");
+  });
+});
+
+describe("Favorites highlighting and interactivity", () => {
+  beforeEach(() => {
+    // Set up DOM and clear storage/global
+    document.body.innerHTML = `<ul id="favorites-list"></ul>`;
+    localStorage.clear();
+    global.currentSelectedFavorite = null;
+  });
+
+  it("renders favorites as spans and highlights the selected favorite", () => {
+    localStorage.setItem("favorites", JSON.stringify(["dog", "cat", "test"]));
+    setCurrentSelectedFavorite("cat");
+    renderFavorites();
+    const spans = document.querySelectorAll(".favorite-word");
+    expect(spans.length).toBe(3);
+    expect(spans[1].classList.contains("selected-favorite")).toBe(true);
+    expect(spans[1].textContent).toBe("Cat");
+  });
+
+  it("removes favorite and clears highlight if it was selected", () => {
+    localStorage.setItem("favorites", JSON.stringify(["dog", "cat"]));
+    setCurrentSelectedFavorite("dog");
+    renderFavorites();
+    // Import removeFavorite from your module if needed
+    removeFavorite("dog");
+    expect(getCurrentSelectedFavorite()).toBeNull();
+    // Check the DOM updates
+    const spans = document.querySelectorAll(".favorite-word");
+    expect(spans.length).toBe(1);
+    expect(spans[0].textContent).toBe("Cat");
+  });
+
+  it("does not add duplicate favorites", () => {
+    localStorage.setItem("favorites", JSON.stringify(["dog"]));
+    saveFavorite("dog");
+    const favorites = JSON.parse(localStorage.getItem("favorites"));
+    expect(favorites.length).toBe(1);
+    expect(favorites[0]).toBe("dog");
   });
 });
