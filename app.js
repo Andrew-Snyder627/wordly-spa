@@ -9,6 +9,9 @@ document.addEventListener("DOMContentLoaded", () => {
   });
 });
 
+// Global Variables
+let currentSelectedFavorite = null;
+
 // Fetch word data from API
 // Throw error if word is not found or failed request
 function fetchWordData(word) {
@@ -124,9 +127,9 @@ function renderFavorites() {
     .map(
       (word) =>
         `<li>
-      <button class="favorite-word" data-word="${word}">${capitalize(
+      <span class="favorite-word" data-word="${word}" tabindex="0" role="button">${capitalize(
           word
-        )}</button>
+        )}</span>
       <button class="remove-favorite" data-word="${word}">Remove</button></li>`
     )
     .join("");
@@ -143,12 +146,20 @@ function renderFavorites() {
       loadFavoriteWord(word);
     })
   );
+  // Apply highlighting to selected favorite if it exists
+  if (currentSelectedFavorite) {
+    highlightFavorite(currentSelectedFavorite);
+  }
 }
 
 function removeFavorite(word) {
   let favorites = JSON.parse(localStorage.getItem("favorites") || "[]");
   favorites = favorites.filter((favorite) => favorite !== word);
   localStorage.setItem("favorites", JSON.stringify(favorites));
+  // Clear highlight if the selected favorite is removed
+  if (currentSelectedFavorite === word) {
+    currentSelectedFavorite = null;
+  }
   renderFavorites();
 }
 
@@ -157,6 +168,7 @@ function loadFavoriteWord(word) {
   fetchWordData(word)
     .then((data) => {
       renderWord(data);
+      currentSelectedFavorite = word;
       highlightFavorite(word);
     })
     .catch(() => {

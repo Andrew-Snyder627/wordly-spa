@@ -147,10 +147,34 @@ blockquote {
   background: #e23b3b;
 }
 
-.selected-favorite {
-  background: #276ef1;
+.favorite-word {
+  cursor: pointer;
+  color: #276ef1;
+  background: #e2edfa;
+  border-radius: 6px;
+  padding: 0.4rem 1rem;
+  margin-right: 1em;
+  font-size: 1rem;
+  font-weight: 600;
+  display: inline-block;
+  transition: background 0.15s, color 0.15s;
+  text-decoration: none;
+}
+
+.favorite-word:hover,
+.favorite-word:focus {
   color: #fff;
-  font-weight: bold;
+  background: #276ef1;
+  outline: none;
+}
+
+.selected-favorite,
+.selected-favorite:focus,
+.selected-favorite:active {
+  background: #276ef1 !important;
+  color: #fff !important;
+  text-decoration: none;
+  outline: none;
 }
 
 @media (max-width: 600px) {
